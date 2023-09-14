@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">sesavannah</string>
+    <string name="company_name">Seoyon E-Hwa Manufacturing Savannah Inc.</string>
+
+    <string-array name="spinner_values">
+        <item>Contents</item>
+        <item>Home</item>
+        <item>Company Overview</item>
+        <item>Contacts</item>
+        <item>Job Postings</item>
+        <item>Events</item>
+    </string-array>
+
+</resources>
