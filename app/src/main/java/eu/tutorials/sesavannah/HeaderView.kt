@@ -1,11 +1,14 @@
 package eu.tutorials.sesavannah
 
 import android.content.Context
+import android.content.Intent
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.constraintlayout.widget.ConstraintLayout
 
 class HeaderView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -29,5 +32,28 @@ class HeaderView @JvmOverloads constructor(
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
+
+        // Add the onItemSelectedListener for the spinner
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                when(parent.getItemAtPosition(position).toString()) {
+                    "Company Overview" -> {
+                        val intent = Intent(context, CompanyOverviewActivity::class.java)
+                        context.startActivity(intent)
+                    }
+
+
+
+                    // Handle other spinner selections if needed
+                    // "Home" -> { /* Navigate to Home */}
+                    // "Contacts" -> { /* Navigate to Contacts */}
+                    // etc.
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // No action needed here
+            }
+        }
     }
 }
