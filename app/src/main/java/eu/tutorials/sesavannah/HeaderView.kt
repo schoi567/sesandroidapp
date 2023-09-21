@@ -1,5 +1,5 @@
 package eu.tutorials.sesavannah
-
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.AttributeSet
@@ -13,9 +13,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 class HeaderView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
+    private var spinnerInitialized = false
 
     init {
-        // Get custom attributes
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.HeaderView)
         val layoutResId = typedArray.getResourceId(R.styleable.HeaderView_header_layout, R.layout.activity_header)
 
@@ -32,20 +32,59 @@ class HeaderView @JvmOverloads constructor(
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
+        val activityContext = context as? Activity
+        val selectedPosition = activityContext?.intent?.getIntExtra("selectedPosition", 0) ?: 0
+        spinner.setSelection(selectedPosition)
+        // Get the selected position from the intent and set it
+      /*  val selectedPosition = (context as? Activity)?.intent?.getIntExtra("selectedPosition", 0) ?: 0
+        spinner.setSelection(selectedPosition) */
 
         // Add the onItemSelectedListener for the spinner
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                if (!spinnerInitialized) {
+                    spinnerInitialized = true
+                    return
+                }
                 when(parent.getItemAtPosition(position).toString()) {
                     "Company Overview" -> {
-                        val intent = Intent(context, CompanyOverviewActivity::class.java)
-                        context.startActivity(intent)
+                        if (context !is CompanyOverviewActivity) {
+                            val intent = Intent(context, CompanyOverviewActivity::class.java)
+                            intent.putExtra("selectedPosition", position)
+                            context.startActivity(intent)
+                        }
+                    }
+                    "Home" -> {
+                        if (context !is MainActivity) {
+                            val intent = Intent(context, MainActivity::class.java)
+                            intent.putExtra("selectedPosition", position)
+                            context.startActivity(intent)
+                        }
+                    }
+                    "Contacts" -> {
+                        if (context !is ContactsView) {
+                            val intent = Intent(context, ContactsView::class.java)
+                            intent.putExtra("selectedPosition", position)
+                            context.startActivity(intent)
+                        }
                     }
 
 
 
-                    // Handle other spinner selections if needed
-                    // "Home" -> { /* Navigate to Home */}
+
+                /*
+                     <string-array name="spinner_values">
+        <item>Contents</item>
+        <item>Home</item>
+        <item>Company Overview</item>
+        <item>Contacts</item>
+        <item>Job Postings</item>
+        <item>Events</item>
+    </string-array>
+                */
+
+
+                    // Handle other spinner selections similarly...
                     // "Contacts" -> { /* Navigate to Contacts */}
                     // etc.
                 }
@@ -55,5 +94,10 @@ class HeaderView @JvmOverloads constructor(
                 // No action needed here
             }
         }
+    }
+
+    // External function to set the spinner's position
+    fun setSelectedPosition(position: Int) {
+        findViewById<Spinner>(R.id.spinner).setSelection(position)
     }
 }

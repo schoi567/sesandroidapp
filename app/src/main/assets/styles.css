@@ -1,0 +1,13 @@
+div.center-box {
+    width: 50px;
+    height: 200px;
+    margin-right: auto; /* Push the box away from the right edge */
+  }
+
+  .center-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-left: 30%;
+    margin-right: 30%;
+  }

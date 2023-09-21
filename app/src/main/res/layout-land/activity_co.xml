@@ -6,8 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <eu.tutorials.sesavannah.HeaderView
+        android:id="@+id/headerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:header_layout="@layout/activity_header"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <include layout="@layout/activity_header"/>
 
     <ImageView
         android:id="@+id/imageView"
