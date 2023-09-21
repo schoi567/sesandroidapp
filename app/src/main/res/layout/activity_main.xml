@@ -28,18 +28,19 @@
             android:text="Click here"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.825"
-
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView2"
+            style="@style/CustomTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:layout_marginTop="95dp"
+            android:text="Welcome to Seoyon E-Hwa Savannah "
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="109dp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </eu.tutorials.sesavannah.HeaderView>
