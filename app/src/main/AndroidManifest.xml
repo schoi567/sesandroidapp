@@ -23,6 +23,9 @@
 
         <activity android:name=".ContactsView" />
         <activity android:name=".CompanyOverviewActivity" />
+        <activity android:name=".ActivityJobPostings" />
+        <activity android:name=".EventsView" />
+
     </application>
 
 </manifest>

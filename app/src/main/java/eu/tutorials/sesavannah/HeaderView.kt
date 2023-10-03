@@ -61,6 +61,7 @@ class HeaderView @JvmOverloads constructor(
                             context.startActivity(intent)
                         }
                     }
+
                     "Contacts" -> {
                         if (context !is ContactsView) {
                             val intent = Intent(context, ContactsView::class.java)
@@ -69,34 +70,36 @@ class HeaderView @JvmOverloads constructor(
                         }
                     }
 
+                    "Job Postings" -> {
+                        if (context !is ActivityJobPostings) {
+                            val intent = Intent(context, ActivityJobPostings::class.java)
+                            intent.putExtra("selectedPosition", position)
+                            context.startActivity(intent)
+                        }
+                    }
+                    "Events" -> {
+                        if (context !is EventsView) {
+                            val intent = Intent(context, EventsView::class.java)
+                            intent.putExtra("selectedPosition", position)
+                            context.startActivity(intent)
+                        }
+                    }
 
 
 
-                /*
-                     <string-array name="spinner_values">
-        <item>Contents</item>
-        <item>Home</item>
-        <item>Company Overview</item>
-        <item>Contacts</item>
-        <item>Job Postings</item>
-        <item>Events</item>
-    </string-array>
-                */
 
 
-                    // Handle other spinner selections similarly...
-                    // "Contacts" -> { /* Navigate to Contacts */}
-                    // etc.
+
                 }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
-                // No action needed here
+
             }
         }
     }
 
-    // External function to set the spinner's position
+
     fun setSelectedPosition(position: Int) {
         findViewById<Spinner>(R.id.spinner).setSelection(position)
     }

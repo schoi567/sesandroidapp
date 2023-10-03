@@ -11,4 +11,25 @@
         <item>Events</item>
     </string-array>
 
+
+    <string-array name="spinner_items">
+        <item>Search here for departments</item>
+        <item>Assembly</item>
+        <item>Development</item>
+        <item>Engineering</item>
+        <item>Finance</item>
+        <item>Human Resource</item>
+        <item>Injection</item>
+        <item>IT</item>
+        <item>Production</item>
+        <item>Production Control</item>
+
+
+    </string-array>
+
+
+
+
+
+
 </resources>
