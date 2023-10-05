@@ -25,7 +25,7 @@
         <activity android:name=".CompanyOverviewActivity" />
         <activity android:name=".ActivityJobPostings" />
         <activity android:name=".EventsView" />
-
+        <activity android:name=".ApplicationView" />
     </application>
 
 </manifest>
