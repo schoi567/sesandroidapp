@@ -15,7 +15,12 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.constraintlayout.widget.ConstraintLayout
-class ApplicationView : AppCompatActivity(){
+class ApplicationView : AppCompatActivity() {
+
+    companion object {
+        private const val REQUEST_CODE_PICK_PDF = 1001
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_application)
@@ -27,13 +32,23 @@ class ApplicationView : AppCompatActivity(){
         submitButton.bringToFront()
         submitButton.requestLayout()
 
+        val attachPdfButton = findViewById<Button>(R.id.attachPdfButton)
+        attachPdfButton.setOnClickListener {
+            val intent = Intent(Intent.ACTION_GET_CONTENT)
+            intent.type = "application/pdf"
+            startActivityForResult(intent, REQUEST_CODE_PICK_PDF)
+        }
+
         submitButton.setOnClickListener {
             val firstName = firstnameEditText.text.toString()
             val lastName = lastnameEditText.text.toString()
             var message1 = firstName + " " + lastName
 
             Log.d("ApplicationView", "First Name: $firstName, Last Name: $lastName")
-            val builder = AlertDialog.Builder(this@ApplicationView, android.R.style.Theme_Material_Dialog_Alert)
+            val builder = AlertDialog.Builder(
+                this@ApplicationView,
+                android.R.style.Theme_Material_Dialog_Alert
+            )
 
             if (firstName.isEmpty() || lastName.isEmpty()) {
                 builder.setTitle("Error")
@@ -53,8 +68,18 @@ class ApplicationView : AppCompatActivity(){
             builder.show()
 
             // Continue with sending the data to the server using Retrofit/OkHttp.
+
         }
+
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_CODE_PICK_PDF && resultCode == Activity.RESULT_OK && data != null) {
+            val selectedPdfUri = data.data
+            // Now you can use the selectedPdfUri to process or upload the PDF
+        }
+    }
 
 }
