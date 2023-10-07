@@ -43,8 +43,14 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
     implementation("com.google.android.material:material:1.9.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+
+    runtimeOnly("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0")
+    runtimeOnly("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0")
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+
+
 }
