@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="departments_array">
+        <item>Search here for departments</item>
+        <item>Assembly</item>
+        <item>Development</item>
+        <item>Engineering</item>
+        <item>Finance</item>
+        <item>General Affairs</item>
+        <item>Human Resource</item>
+        <item>Injection</item>
+        <item>IT</item>
+        <item>Production</item>
+        <item>Production Control</item>
+    </string-array>
+</resources>
