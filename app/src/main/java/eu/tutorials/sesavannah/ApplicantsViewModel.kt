@@ -1,54 +1,63 @@
 package eu.tutorials.sesavannah
+
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import androidx.lifecycle.LiveData
 
 class ApplicantsViewModel : ViewModel() {
 
-    private val _adminDataLiveData: MutableLiveData<List<String>> = MutableLiveData()
-    val adminDataLiveData: LiveData<List<String>>
+    private val _adminDataLiveData: MutableLiveData<List<AdminData>> = MutableLiveData()
+    val adminDataLiveData: LiveData<List<AdminData>>
         get() = _adminDataLiveData
-
-    fun fetchAdminData() {
-        val request: ApplicantsAPI = ServiceBuilder.buildService(ApplicantsAPI::class.java)
-        val call = request.getAdminData()
-
-        call.enqueue(object : Callback<List<String>> {
-            override fun onResponse(call: Call<List<String>>, response: Response<List<String>>) {
-                if (response.isSuccessful) {
-                    _adminDataLiveData.postValue(response.body())
-                }
-            }
-
-            override fun onFailure(call: Call<List<String>>, t: Throwable) {
-                // Handle error
-            }
-        })
-    }
-
-
-
-
-
-
-
-
-
-
-
-
- ///////////////////////////////////////////
-
-
 
     private val _responseLiveData: MutableLiveData<Response<Void>> = MutableLiveData()
     val responseLiveData: LiveData<Response<Void>>
         get() = _responseLiveData
 
-    fun createApplicant(firstName: String, lastName: String) {  // Assuming only two parameters for simplicity
+    fun fetchAdminData() {
+        val request: ApplicantsAPI = ServiceBuilder.buildService(ApplicantsAPI::class.java)
+        val call = request.getAdminData() // Assuming getAdminData returns Call<List<AdminData>> now
+
+        call.enqueue(object : Callback<List<AdminData>> {
+            override fun onResponse(call: Call<List<AdminData>>, response: Response<List<AdminData>>) {
+                if (response.isSuccessful) {
+                    _adminDataLiveData.postValue(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<List<AdminData>>, t: Throwable) {
+                // Handle error, possibly updating another LiveData with error information
+            }
+        })
+    }
+
+    /*
+    fun fetchAdminData() {
+    val request: ApplicantsAPI = ServiceBuilder.buildService(ApplicantsAPI::class.java)
+    val call = request.getAdminData()
+
+    call.enqueue(object : Callback<List<AdminData>> {
+        override fun onResponse(call: Call<List<AdminData>>, response: Response<List<AdminData>>) {
+            if (response.isSuccessful) {
+                _adminDataLiveData.postValue(response.body())
+            }
+        }
+
+        override fun onFailure(call: Call<List<AdminData>>, t: Throwable) {
+            // Handle error
+        }
+    })
+}
+
+    *
+    * */
+
+
+
+    fun createApplicant(firstName: String, lastName: String) {
         val request: ApplicantsAPI = ServiceBuilder.buildService(ApplicantsAPI::class.java)
         val call = request.createApplicant(firstName, lastName)
 

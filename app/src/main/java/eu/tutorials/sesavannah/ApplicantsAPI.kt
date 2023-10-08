@@ -14,7 +14,7 @@ interface ApplicantsAPI {
     ): Call<Void>
 
     @GET("/admin")
-    fun getAdminData(): Call<List<String>>  // Assuming the data is a list of strings for simplicity. Adjust accordingly.
+    fun getAdminData(): Call<List<AdminData>>  // Assuming the data is a list of strings for simplicity. Adjust accordingly.
 
 
 }
