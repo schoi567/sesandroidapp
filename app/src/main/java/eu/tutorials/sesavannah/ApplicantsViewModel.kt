@@ -3,6 +3,10 @@ package eu.tutorials.sesavannah
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -57,9 +61,15 @@ class ApplicantsViewModel : ViewModel() {
 
 
 
-    fun createApplicant(firstName: String, lastName: String) {
+    fun createApplicant(firstName: String, lastName: String, email: String, department: String, resumePart: MultipartBody.Part) {
         val request: ApplicantsAPI = ServiceBuilder.buildService(ApplicantsAPI::class.java)
-        val call = request.createApplicant(firstName, lastName)
+        val firstNameReq = RequestBody.create("text/plain".toMediaTypeOrNull(), firstName)
+        val lastNameReq = RequestBody.create("text/plain".toMediaTypeOrNull(), lastName)
+        val emailReq = RequestBody.create("text/plain".toMediaTypeOrNull(), email)
+        val departmentReq = RequestBody.create("text/plain".toMediaTypeOrNull(), department)
+
+        val call = request.createApplicant(firstNameReq, lastNameReq, emailReq, departmentReq, resumePart)
+
 
         call.enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {

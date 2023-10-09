@@ -1,4 +1,6 @@
 package eu.tutorials.sesavannah
+import okhttp3.MultipartBody
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
@@ -12,9 +14,11 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import okhttp3.RequestBody
+import java.io.File
 
     class ApplicationView : AppCompatActivity() {
-
+        private val viewModel = ApplicantsViewModel()
     companion object {
         private const val REQUEST_CODE_PICK_PDF = 1001
         //The requestCode gets the value of 1001 (or REQUEST_CODE_PICK_PDF) not automatically,
@@ -65,6 +69,19 @@ import android.widget.Spinner
             val email = emailEditText.text.toString()
             val selectedDepartment = departmentSpinner.selectedItem?.toString() ?: ""
 
+            val filePath = FileUtil.getPathFromUri(this, selectedPdfUri)  // You need a utility method for this
+
+
+            //val requestFile = File(filePath).asRequestBody("application/pdf".toMediaTypeOrNull())
+            val mediaType = "application/pdf".toMediaTypeOrNull()
+            val requestFile = RequestBody.create(mediaType, File(filePath))
+
+
+            val resumePart = MultipartBody.Part.createFormData("resume", File(filePath).name, requestFile)
+
+            viewModel.createApplicant(firstName, lastName, email, selectedDepartment, resumePart)
+
+
             // Construct the message
             var message = "First Name: $firstName\n" +
                     "Last Name: $lastName\n" +
@@ -78,17 +95,20 @@ import android.widget.Spinner
 
 
 
-            Log.d("ApplicationView", "First Name: $firstName, Last Name: $lastName")
+        //    Log.d("ApplicationView", "First Name: $firstName, Last Name: $lastName")
             val builder = AlertDialog.Builder(
                 this@ApplicationView,
                 android.R.style.Theme_Material_Dialog_Alert
             )
 
-            if (firstName.isEmpty() || lastName.isEmpty()) {
+            if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || selectedDepartment.isEmpty()
+            ) {
                 builder.setTitle("Error")
                 var message = "Please provide the following details:\n"
                 if (firstName.isEmpty()) message += "- First name\n"
                 if (lastName.isEmpty()) message += "- Last name\n"
+                if (email.isEmpty()) message += "- Last name\n"
+                if (selectedDepartment.isEmpty()) message += "- selectedDepartment\n"
                 builder.setMessage(message.trim())
                 builder.setPositiveButton("OK") { dialog, _ ->
                     dialog.dismiss()
