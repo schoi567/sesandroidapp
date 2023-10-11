@@ -17,8 +17,12 @@ interface ApplicantsAPI {
         @Part("lastname") lastName: RequestBody,
         @Part("email") email: RequestBody,
         @Part("department") selectedDepartment: RequestBody,
-        @Part resumePart: MultipartBody.Part
+        @Part("resume") resumePart: MultipartBody.Part
     ): Call<Void>
+
+
+
+
 
     @GET("/admin")
     fun getAdminData(): Call<List<AdminData>>

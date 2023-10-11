@@ -1,25 +1,43 @@
 package eu.tutorials.sesavannah
-import okhttp3.MultipartBody
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.widget.EditText
-import android.widget.Button
-import android.app.AlertDialog
-import android.util.Log
+
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
 import android.widget.Spinner
+import androidx.appcompat.app.AppCompatActivity
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
 
-    class ApplicationView : AppCompatActivity() {
+
+class ApplicationView : AppCompatActivity() {
+
+
+    private fun onFileSelected(uri: Uri) {
+        try {
+            val contentResolver = contentResolver
+            val inputStream = contentResolver.openInputStream(uri)
+
+            // Now you can read the file using this inputStream
+            // Process the input stream as required
+            inputStream!!.close()
+        } catch (e: Exception) {
+            Log.e(TAG, "Error reading from URI", e)
+        }
+    }
+
+
         private val viewModel = ApplicantsViewModel()
     companion object {
+        private const val TAG = "ApplicationView"
         private const val REQUEST_CODE_PICK_PDF = 1001
         //The requestCode gets the value of 1001 (or REQUEST_CODE_PICK_PDF) not automatically,
     // but because you explicitly set it when starting the PDF picker activity using startActivityForResult().
@@ -53,6 +71,39 @@ import java.io.File
 
         submitButton.requestLayout()
 
+        submitButton.setOnClickListener {
+            val mediaType = "application/pdf".toMediaTypeOrNull()
+            val firstName = firstnameEditText.text.toString()
+            val lastName = lastnameEditText.text.toString()
+            val email = emailEditText.text.toString()
+            val selectedDepartment = departmentSpinner.selectedItem?.toString() ?: ""
+            Log.d("ApplicationView", "Selected URI: $selectedPdfUri")
+
+
+
+
+            val filePath = FileUtil.getPathFromUri(this, selectedPdfUri)
+            if (filePath != null) {
+                val requestFile = RequestBody.create(mediaType, File(filePath))
+                val resumePart = MultipartBody.Part.createFormData("resume", File(filePath).name, requestFile)
+                viewModel.createApplicant(firstName, lastName, email, selectedDepartment, resumePart)
+                Log.d("ApplicationView", "Selected URI: $selectedPdfUri")
+
+            } else {
+                Log.e("ApplicationView", "Error obtaining file path from URI")
+            }
+
+
+            //val requestFile = File(filePath).asRequestBody("application/pdf".toMediaTypeOrNull())
+
+
+
+
+
+
+        }
+
+
 
         attachPdfButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_GET_CONTENT)
@@ -62,69 +113,6 @@ import java.io.File
             startActivityForResult(intent, REQUEST_CODE_PICK_PDF)
             //startActivityForResult(intent, REQUEST_CODE_PICK_PDF)  in this activity, the intent is set to requestCode which is in  super.onActivityResult(requestCode, resultCode, data)
         }
-
-        submitButton.setOnClickListener {
-            val firstName = firstnameEditText.text.toString()
-            val lastName = lastnameEditText.text.toString()
-            val email = emailEditText.text.toString()
-            val selectedDepartment = departmentSpinner.selectedItem?.toString() ?: ""
-
-            val filePath = FileUtil.getPathFromUri(this, selectedPdfUri)  // You need a utility method for this
-
-
-            //val requestFile = File(filePath).asRequestBody("application/pdf".toMediaTypeOrNull())
-            val mediaType = "application/pdf".toMediaTypeOrNull()
-            val requestFile = RequestBody.create(mediaType, File(filePath))
-
-
-            val resumePart = MultipartBody.Part.createFormData("resume", File(filePath).name, requestFile)
-
-            viewModel.createApplicant(firstName, lastName, email, selectedDepartment, resumePart)
-
-
-            // Construct the message
-            var message = "First Name: $firstName\n" +
-                    "Last Name: $lastName\n" +
-                    "Email: $email\n" +
-                    "Department: $selectedDepartment\n"
-
-            // Append the selected PDF Uri if available
-            if (selectedPdfUri != null) {
-                message += "Selected PDF: ${selectedPdfUri.toString()}"
-            }
-
-
-
-        //    Log.d("ApplicationView", "First Name: $firstName, Last Name: $lastName")
-            val builder = AlertDialog.Builder(
-                this@ApplicationView,
-                android.R.style.Theme_Material_Dialog_Alert
-            )
-
-            if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || selectedDepartment.isEmpty()
-            ) {
-                builder.setTitle("Error")
-                var message = "Please provide the following details:\n"
-                if (firstName.isEmpty()) message += "- First name\n"
-                if (lastName.isEmpty()) message += "- Last name\n"
-                if (email.isEmpty()) message += "- Last name\n"
-                if (selectedDepartment.isEmpty()) message += "- selectedDepartment\n"
-                builder.setMessage(message.trim())
-                builder.setPositiveButton("OK") { dialog, _ ->
-                    dialog.dismiss()
-                }
-            } else {
-                builder.setMessage(message)  // Fixed here
-                builder.setPositiveButton("OK") { dialog, _ ->
-                    dialog.dismiss()
-                }
-            }
-            builder.show()
-
-            // Continue with sending the data to the server using Retrofit/OkHttp.
-
-        }
-
 
 
         departmentSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -148,14 +136,23 @@ import java.io.File
 
     }
 
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == REQUEST_CODE_PICK_PDF && resultCode == Activity.RESULT_OK && data != null) {
             this.selectedPdfUri = data.data
 
+            // Call the onFileSelected method here
+            selectedPdfUri?.let { onFileSelected(it) }
+
             // Now you can use the selectedPdfUri to process or upload the PDF
         }
     }
+
+
+
+
 
 }
