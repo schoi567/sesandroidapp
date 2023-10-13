@@ -84,7 +84,7 @@ class HeaderView @JvmOverloads constructor(
                             context.startActivity(intent)
                         }
                     }
-// <item>Application</item>
+
                     "Application" -> {
                         if (context !is ApplicationView) {
                             val intent = Intent(context, ApplicationView::class.java)

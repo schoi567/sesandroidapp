@@ -43,6 +43,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
     implementation("com.google.android.material:material:1.9.0")
+    implementation("com.google.android.gms:play-services-maps:17.0.1")
 
     implementation ("com.squareup.okhttp3:okhttp:4.9.1")
 
