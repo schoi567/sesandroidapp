@@ -8,7 +8,21 @@ import android.provider.MediaStore
 import java.io.File
 
 object FileUtil {
+    fun getPathFromUri(context: Context, contentUri: Uri?): String? {
+        val cacheDir = context.cacheDir
+        val tempFile = File.createTempFile("prefix", "extension", cacheDir)
+        tempFile.outputStream().use { cacheOut ->
+            context.contentResolver.openInputStream(contentUri!!)?.use { stream ->
+                stream.copyTo(cacheOut)
+            }
+        }
+        return tempFile.absolutePath
+    }
 
+
+    }
+
+/*
     fun getPathFromUri(context: Context, contentUri: Uri?): String? {
         if (contentUri == null) return null
         var cursor: Cursor? = null
@@ -25,10 +39,8 @@ object FileUtil {
         } finally {
             cursor?.close()
         }
-    }
-}
 
-
+        */
 
 /*
 package eu.tutorials.sesavannah

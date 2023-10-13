@@ -12,11 +12,7 @@ import androidx.lifecycle.Observer
 //import androidx.activity.viewModels
 
 class MainActivity : AppCompatActivity() {
- //   private val viewModel by viewModels<ApplicantsViewModel>()
      private val viewModel = ApplicantsViewModel()
-
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

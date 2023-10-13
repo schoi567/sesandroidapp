@@ -17,7 +17,7 @@ interface ApplicantsAPI {
         @Part("lastname") lastName: RequestBody,
         @Part("email") email: RequestBody,
         @Part("department") selectedDepartment: RequestBody,
-        @Part("resume") resumePart: MultipartBody.Part
+        @Part resumePart: MultipartBody.Part
     ): Call<Void>
 
 
